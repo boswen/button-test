@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Splash Screen Entrance Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" src="splash-script.js" defer></script>
+  <style>
+    .btn{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);padding:.75rem 1rem;border-radius:.75rem;color:#fff;text-decoration:none;display:inline-block;}
+    .btn:hover{background:rgba(255,255,255,0.15);}
+  </style>  
+</head>
+<body class="bg-neutral-950 text-neutral-100">
+  <main">
+    <section class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <div class="mt-8 flex justify-center items-center">
+          <button
+            id="hold-activate"
+            type="button"
+            class="btn relative inline-flex items-center gap-3 h-14 px-4 select-none"
+            aria-label="Activate Terminal"
+          >
+            <!-- DS2-style icon -->
+            <span class="relative inline-grid place-items-center" style="width:50px;height:50px">
+              <svg
+                width="50" height="51" viewBox="0 0 72 72" aria-hidden="true"
+                class="drop-shadow-sm"
+              >
+                <!-- static outer bezel with 4 segments (dashes set by JS for perfect quarters) -->
+                <circle id="hold-activate-bezel"
+                  cx="36" cy="36" r="30"
+                  fill="none" stroke="rgb(255 255 255)" stroke-width="6"
+                  stroke-linecap="round"
+                ></circle>
+
+                <!-- progress ring (fills clockwise; we animate dashoffset in JS) -->
+                <circle id="hold-activate-progress"
+                  cx="36" cy="36" r="30"
+                  fill="none" stroke="rgb(249 115 22)" stroke-width="6"
+                  class="transition-[stroke] duration-150 ease-linear"
+                  stroke-linecap="butt"
+                  transform="rotate(-90 36 36)"
+                ></circle>
+
+                <!-- inner blue ring -->
+                <circle
+                  cx="36" cy="36" r="20"
+                  fill="white" stroke="rgb(56 189 248)" stroke-width="8"
+                ></circle>
+
+                <!-- center square glyph (blue fill, light border) -->
+                <rect x="29" y="29" width="14" height="14" rx="2" ry="2"
+                  fill="white" stroke="rgb(56 189 248)" stroke-width="2"
+                ></rect>
+
+                <!-- north marker triangle -->
+                <polygon points="36,6 31,14 41,14" fill="rgb(246 232 195)"></polygon>
+              </svg>
+            </span>
+
+            <span class="text-2xl font-semibold tracking-wide">Activate Terminal</span>
+          </button>
+        </div>
+        <p class="mt-2 text-center italic text-xs text-neutral-400">Press &amp; hold ~2s to activate<br />Mobile: Tap once to enable sound, then press &amp; hold.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
