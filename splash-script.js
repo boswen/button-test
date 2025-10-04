@@ -12,12 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let loadingPromise = null;
   let currentSource = null; // To hold the reference to the playing sound
 
-  // Select an audio type based on support
-  const sfxUrl = (() => {
-    const a = document.createElement('audio');
-    return a.canPlayType('audio/mp4; codecs="mp4a.40.2"') ? '/sfx/activate.m4a' : '/sfx/activate.mp3';
-  })();
-
   function initAudio() {
     if (audioCtx) return;
     try {
@@ -30,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function loadSound() {
     try {
-      const response = await fetch(sfxUrl);
+      const response = await fetch("/sfx/activate.mp3");
       const arrayBuffer = await response.arrayBuffer();
       audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
     } catch (error) {
