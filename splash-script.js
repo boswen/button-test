@@ -80,19 +80,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---- Bezel: 5 segments with thin gaps + rounded caps ----
   const SEGMENTS = 5;
   const STROKE   = 6;           // must match the SVG stroke-width on the bezel
-  // Choose how thin you want the gaps (smaller = thinner). Start with 1/60 of the circumference.
-  let gap = CIRC / 60;
+  let gap = CIRC / 60;          // width of the gaps (smaller = thinner)
 
   // With stroke-linecap="round", each end adds ~STROKE/2 roundness,
   // which visually eats into the gap from both sides.
-  // If your gaps look too thin, bump the gap a bit to compensate:
+  // Increase the gap a bit to compensate for gaps looking too thin
   gap += STROKE * 1;          // tweak or remove if not needed
 
   const seg = (CIRC / SEGMENTS) - gap;  // fill the rest of each fifth with the segment
   bezel.style.strokeDasharray = `${seg} ${gap}`;
   bezel.style.strokeLinecap   = 'round';
 
-  // Optional: center a gap at the 12 o'clock marker (under the triangle)
+  // Center a gap at the 12 o'clock marker (under the triangle)
   bezel.style.strokeDashoffset = gap / 2;
 
   // Progress ring start (fully hidden)
@@ -105,18 +104,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let raf = null, t0 = 0, holding = false;
 
   const setFifthProgress = (frac) => {
-    // snap to 0, .25, .5, .75, 1
+    // snap to 0, .2, .4, .6, .8, 1
     const q = Math.min(Math.floor(frac * 5) / 5, 1);
     ring.style.strokeDashoffset = CIRC * (1 - q);
-
-    // subtle color ramp (disabled; change colors as desired)
-    ring.style.stroke =
-      q >= 1   ? "rgb(70 165 242)"    // "APAS Blue"
-    : q >= 0.8 ? "rgb(70 165 242)"    // APAS Blue
-    : q >= 0.6 ? "rgb(70 165 242)"    // APAS Blue
-    : q >= 0.4 ? "rgb(70 165 242)"    // APAS Blue
-    : q >= 0.2 ? "rgb(70 165 242)"    // APAS Blue
-               : "rgb(70 165 242)";   // APAS Blue
+    ring.style.stroke = "rgb(70 165 242)"    // "APAS Blue"
   };
 
   const stop = (reset=true) => {
@@ -137,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
       completed = true;
       try { navigator.vibrate?.(15); } catch {}
       
-      // go now; optional tiny cushion so the click isn't cut instantly
+      // go after tiny cushion so the click isn't cut instantly
       setTimeout(() => { window.location.href = 'https://stackoverflow.com/questions/79777388/play-a-sound-clip-on-first-button-tap-on-mobile'; }, 75);
 
       stop(false);
@@ -152,13 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (holding) return;
     holding = true; t0 = 0; completed = false;
     playSound();   // start sound immediately (async covers mobile first-press)
-  
-    // temp fix w/ basic audio element
-    // let audioEl = new Audio(sfxUrl);
-    // audioEl.preload = 'auto';
-    // audioEl.currentTime = 0;
-    // audioEl.play();
-  
+      
     raf = requestAnimationFrame(tick);
   };
 
@@ -175,19 +160,4 @@ document.addEventListener("DOMContentLoaded", () => {
   btn.addEventListener("pointerup", up);
   btn.addEventListener("pointercancel", up);
   btn.addEventListener('pointerleave', () => { if (!completed) { stop(true); stopSound(); } });
-
-  // keyboard (Space/Enter) can mimic the same behavior:
-  btn.addEventListener("keydown", (e) => {
-    if (e.repeat) return;
-    if (e.code === "Space" || e.code === "Enter") {
-      if (!holding) { holding = true; t0 = 0; completed = false; playSound(); raf = requestAnimationFrame(tick); }
-      e.preventDefault();
-    }
-  });
-  btn.addEventListener("keyup", (e) => {
-    if (e.code === 'Space' || e.code === 'Enter') { const wasHolding = holding; stop(true); if (!completed && wasHolding) stopSound(); e.preventDefault(); }
-  });
 });
-
-// Set current year in footer
-document.getElementById('year').textContent = new Date().getFullYear();
