@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!btn || !ring || !bezel) return;
 
+  // - Start of Minimal, Reproducible Example for Stack Overflow -
   // --- Hybrid Web Audio Implementation (Start/Stop Enabled) ---
   let audioCtx = null;
   let audioBuffer = null;
@@ -14,12 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initAudio() {
     if (audioCtx) return;
-    try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      loadingPromise = loadSound();
-    } catch (e) {
-      console.error("Web Audio API is not supported.", e);
-    }
+    // Assumes Web Audio API is supported
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    loadingPromise = loadSound();
   }
 
   async function loadSound() {
@@ -66,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
       currentSource = null;
     }
   }
+  // - End of Minimal, Reproducible Example for Stack Overflow -
 
   // ---- geometry (keep in sync with SVG) ----
   const RADIUS = 30;                          // matches r in the SVG
